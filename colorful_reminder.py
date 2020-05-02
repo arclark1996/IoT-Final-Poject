@@ -28,11 +28,11 @@ try:
 except ImportError:
     flags = None
 
-# Google says: If modifying these scopes, delete your previously saved credentials at ~/.credentials/client_secret.json
+# Google says: If modifying these scopes, delete token.pickle
 # On the pi, it's in /root/.credentials/
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
-APPLICATION_NAME = 'Pi Reminder'
+APPLICATION_NAME = 'Colorful Calendar Reminder'
 CALENDAR_ID = 'primary'
 HASH = '#'
 HASHES = '########################################'
@@ -357,8 +357,8 @@ def main():
 # now tell the user what we're doing...
 print('\n')
 print(HASHES)
-print(HASH, 'Colorful Calendar Reminder             ', HASH)
-print(HASH, '            By Amanda Clark                    ', HASH)
+print(HASH, 'Colorful Calendar Reminder          ', HASH)
+print(HASH, '      By Amanda Clark               ', HASH)
 print(HASHES)
 
 # output whether reboot mode is enabled
@@ -385,6 +385,7 @@ try:
     socket.setdefaulttimeout(60)  # 60 seconds
     credentials = get_credentials()
     service = build('calendar', 'v3', credentials = credentials)
+
 except Exception as e:
     print('\nException type:', type(e))
     # not much else we can do here except to skip this attempt and try again later
