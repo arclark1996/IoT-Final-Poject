@@ -29,7 +29,7 @@ except ImportError:
     flags = None
 
 # Google says: If modifying these scopes, delete token.pickle
-# On the pi, it's in /root/.credentials/
+# On the pi, it's in token.pickle
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Colorful Calendar Reminder'
@@ -38,9 +38,12 @@ HASH = '#'
 HASHES = '########################################'
 
 # Reminder thresholds
-FIRST_THRESHOLD = 5  # minutes, WHITE lights before this
-# RED for anything less than (and including) the second threshold
-SECOND_THRESHOLD = 2  # minutes, YELLOW lights before this
+FIRST_THRESHOLD = 60 # minutes, PURPLE lights
+SECOND_THRESHOLD = 45 # minutes, GREEN lights
+THIRD_THRESHOLD = 30 # minutes, BLUE lights
+FOURTH_THRESHOLD = 15 # minutes, ORANGE lights
+FIFTH_THRESHOLD = 10 # minutes, PINK lights
+SEVENTH_THRESHOLD = 2  # minutes, YELLOW lights before this
 
 # Reboot Options - Added this to enable users to reboot the pi after a certain number of failed retries.
 # I noticed that on power loss, the Pi looses connection to the network and takes a reboot after the network
@@ -51,11 +54,13 @@ reboot_counter = 0  # counter variable, tracks retry events.
 
 # COLORS
 RED = (255, 0, 0)
+ORANGE = (255, 153, 0)
+YELLOW = (255, 255, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
-ORANGE = (255, 153, 0)
+PURPLE = (153, 51, 255)
+PINK = (255, 102, 255)
 WHITE = (255, 255, 255)
-YELLOW = (255, 255, 0)
 
 # constants used in the app to display status
 CHECKING_COLOR = BLUE
@@ -331,27 +336,51 @@ def main():
                     print('Starts in {} minutes\n'.format(num_minutes))
                 else:
                     print('Starts in 1.0 minute\n')
-                # is the appointment between 10 and 5 minutes from now?
+                # is the appointment between 60 and 45 minutes from now?
                 if num_minutes >= FIRST_THRESHOLD:
-                    # Flash the lights in WHITE
-                    flash_all(1, 0.25, WHITE)
+                    # Flash the lights in PURPLE
+                    flash_all(1, 0.25, PURPLE)
+                    # set the activity light to PURPLE as an indicator
+                    set_activity_light(PURPLE, False)
+                # is the appointment between 45 and 30 minutes from now?
+                elif num_minutes > SECOND_THRESHOLD:
+                    # Flash the lights GREEN
+                    flash_all(2, 0.25, GREEN)
+                    # set the activity light to GREEN as an indicator
+                    set_activity_light(GREEN, False)
+                # is the appointment between 30 and 15 minutes from now?
+                elif num_minutes > THIRD_THRESHOLD:
+                    # Flash the lights BLUE
+                    flash_all(3, 0.25, BLUE)
+                    # set the activity light to BLUE as an indicator
+                    set_activity_light(BLUE, False)
+                # is the appointment between 15 and 10 minutes from now?
+                elif num_minutes > FOURTH_THRESHOLD:
+                    # Flash the lights ORANGE
+                    flash_all(4, 0.25, ORANGE)
+                    # set the activity light to ORANGE as an indicator
+                    set_activity_light(ORANGE, False)
+                # is the appointment between 10 and 5 minutes from now?
+                elif num_minutes > FIFTH_THRESHOLD:
+                    # Flash the lights PINK
+                    flash_all(5, 0.25, PINK)
+                    # set the activity light to PINK as an indicator
+                    set_activity_light(PINK, False)
+                # is the appointment between 5 and 2 minutes from now?
+                elif num_minutes > SIXTH_THRESHOLD:
+                    # Flash the lights WHITE
+                    flash_all(6, 0.25, WHITE)
                     # set the activity light to WHITE as an indicator
                     set_activity_light(WHITE, False)
-                # is the appointment less than 5 minutes but more than 2 minutes from now?
-                elif num_minutes > SECOND_THRESHOLD:
-                    # Flash the lights YELLOW
-                    flash_all(2, 0.25, YELLOW)
-                    # set the activity light to YELLOw as an indicator
-                    set_activity_light(YELLOW, False)
                 # hmmm, less than 2 minutes, almost time to start!
                 else:
                     # swirl the lights. Longer every second closer to start time
                     do_swirl(int((4 - num_minutes) * 100))
                     # set the activity light to SUCCESS_COLOR (green by default)
-                    set_activity_light(ORANGE, False)
+                    set_activity_light(YELLOW, False)
         # wait a second then check again
         # You can always increase the sleep value below to check less often
-        time.sleep(1)
+        time.sleep(30)
 
 
 # now tell the user what we're doing...
