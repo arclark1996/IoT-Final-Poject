@@ -38,12 +38,12 @@ HASH = '#'
 HASHES = '########################################'
 
 # Reminder thresholds
-FIRST_THRESHOLD = 60 # minutes, PURPLE lights
-SECOND_THRESHOLD = 45 # minutes, GREEN lights
-THIRD_THRESHOLD = 30 # minutes, BLUE lights
-FOURTH_THRESHOLD = 15 # minutes, ORANGE lights
-FIFTH_THRESHOLD = 10 # minutes, PINK lights
-SIXTH_THRESHOLD = 5  # minutes, WHITE lights before this
+FIRST_THRESHOLD = 45 # minutes, PURPLE lights
+SECOND_THRESHOLD = 30 # minutes, GREEN lights
+THIRD_THRESHOLD = 15 # minutes, BLUE lights
+FOURTH_THRESHOLD = 10 # minutes, ORANGE lights
+FIFTH_THRESHOLD = 5 # minutes, PINK lights
+SIXTH_THRESHOLD = 2 # minutes, WHITE lights 
 
 # Reboot Options - Added this to enable users to reboot the pi after a certain number of failed retries.
 # I noticed that on power loss, the Pi looses connection to the network and takes a reboot after the network
@@ -328,7 +328,7 @@ def main():
             last_minute = current_minute
             # we've moved a minute, so we have work to do
             # get the next calendar event (within the specified time limit [in minutes])
-            next_event = get_next_event(10)
+            next_event = get_next_event(59)
             # do we get an event?
             if next_event is not None:
                 num_minutes = next_event['num_minutes']
@@ -336,7 +336,7 @@ def main():
                     print('Starts in {} minutes\n'.format(num_minutes))
                 else:
                     print('Starts in 1.0 minute\n')
-                # is the appointment between 60 and 45 minutes from now?
+                # is the appointment between 59 and 45 minutes from now?
                 if num_minutes >= FIRST_THRESHOLD:
                     # Flash the lights in PURPLE
                     flash_all(1, 0.25, PURPLE)
