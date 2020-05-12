@@ -43,7 +43,7 @@ SECOND_THRESHOLD = 45 # minutes, GREEN lights
 THIRD_THRESHOLD = 30 # minutes, BLUE lights
 FOURTH_THRESHOLD = 15 # minutes, ORANGE lights
 FIFTH_THRESHOLD = 10 # minutes, PINK lights
-SEVENTH_THRESHOLD = 2  # minutes, YELLOW lights before this
+SIXTH_THRESHOLD = 5  # minutes, WHITE lights before this
 
 # Reboot Options - Added this to enable users to reboot the pi after a certain number of failed retries.
 # I noticed that on power loss, the Pi looses connection to the network and takes a reboot after the network
